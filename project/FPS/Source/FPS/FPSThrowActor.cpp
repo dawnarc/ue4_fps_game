@@ -18,7 +18,7 @@ AFPSThrowActor::AFPSThrowActor()
 	
 	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComp"));
 	//StaticMeshComp->SetCollisionEnabled(ECollisionEnabled::Type::PhysicsOnly);
-	StaticMeshComp->SetSimulatePhysics(false);
+	//StaticMeshComp->SetSimulatePhysics(false);
 	StaticMeshComp->SetCastShadow(false);
 
 	// Set as root component
@@ -57,6 +57,13 @@ void AFPSThrowActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (StaticMeshComp && StaticMeshComp->IsSimulatingPhysics())
+	{
+		FVector Velocity = StaticMeshComp->GetPhysicsLinearVelocity();
+		//@TODO aix Z speed should change dynamicly.
+		Velocity.Z -= GravitySpeed;
+		StaticMeshComp->SetPhysicsLinearVelocity(Velocity);
+	}
 }
 
 void AFPSThrowActor::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
