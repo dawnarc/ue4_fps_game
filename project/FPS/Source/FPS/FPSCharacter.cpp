@@ -88,7 +88,7 @@ void AFPSCharacter::SetUserName(const FString& UserName)
 	UserName_ = UserName;
 }
 
-FString AFPSCharacter::UserName()
+FString AFPSCharacter::UserName() const
 {
 	return UserName_;
 }
@@ -156,6 +156,9 @@ void AFPSCharacter::ServerReleaseGrenade_Implementation()
 
 			if (AFPSThrowActor* ThrowActor = World->SpawnActor<AFPSThrowActor>(GrenadeActorClass, SpawnLocation, SpawnRotation))
 			{
+				//if not SetOwner(), Multicast UFUNCTION of this ThrowActor would not trigger on client.
+				ThrowActor->SetOwner(this);
+
 				GrenadeReloadFlag_ = false;
 
 				//notify client to reload grenade.

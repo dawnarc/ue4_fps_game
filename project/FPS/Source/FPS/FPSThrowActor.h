@@ -39,13 +39,13 @@ protected:
 
 	void CalcGrenadeDamage();
 
-	/*UFUNCTION(NetMulticast, Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 		void MulticastPlayExplodeEffect();
-	void MulticastPlayExplodeEffect_Implementation();*/
+	void MulticastPlayExplodeEffect_Implementation();
 
-	UFUNCTION(Client, Unreliable)
+	/*UFUNCTION(Client, Unreliable)
 		void ClientPlayExplodeEffect();
-	void ClientPlayExplodeEffect_Implementation();
+	void ClientPlayExplodeEffect_Implementation();*/
 
 protected:
 

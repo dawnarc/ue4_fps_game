@@ -13,7 +13,7 @@ struct PlayerData
 {
 	PlayerData()
 	{
-		Character = NULL;
+		Character = nullptr;
 	}
 
 	AFPSCharacter* Character;

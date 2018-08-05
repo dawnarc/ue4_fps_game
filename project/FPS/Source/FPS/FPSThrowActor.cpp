@@ -15,6 +15,8 @@ AFPSThrowActor::AFPSThrowActor()
 
 	bReplicates = true;
 	bReplicateMovement = true;
+	//if set bNetUseOwnerRelevancy false, Multicast UFUNCTION of this Acotr would not trigger on client.
+	bNetUseOwnerRelevancy = true;
 	
 	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComp"));
 	//StaticMeshComp->SetCollisionEnabled(ECollisionEnabled::Type::PhysicsOnly);
@@ -24,7 +26,7 @@ AFPSThrowActor::AFPSThrowActor()
 	// Set as root component
 	RootComponent = StaticMeshComp;
 
-	GravitySpeed = 100.f;
+	GravitySpeed = 50.f;
 
 	ExplodeDamageRadius = 600.f;
 }
@@ -88,7 +90,7 @@ void AFPSThrowActor::GrenadeExplode()
 
 	CalcGrenadeDamage();
 
-	ClientPlayExplodeEffect();
+	MulticastPlayExplodeEffect();
 
 	Destroy();
 }
@@ -107,9 +109,10 @@ void AFPSThrowActor::CalcGrenadeDamage()
 	}
 }
 
-void AFPSThrowActor::ClientPlayExplodeEffect_Implementation()
+void AFPSThrowActor::MulticastPlayExplodeEffect_Implementation()
 {
 	ENetMode EM = GetNetMode();
+
 	if (NM_Client == GetNetMode())
 	{
 		if (ExplodeEffectTemplate)

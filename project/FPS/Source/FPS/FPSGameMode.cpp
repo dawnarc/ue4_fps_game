@@ -61,6 +61,7 @@ void AFPSGameMode::PreLogin(const FString& Options, const FString& Address, cons
 	FString UserName = UGameplayStatics::ParseOption(Options, TEXT("UserName")).TrimStart().TrimEnd();
 	if (UserName.Len() == 0 || UserMap.Find(UserName))
 	{
+		//deny client's login request.
 		ErrorMessage = TEXT("User login repeatly!");
 	}
 }
@@ -79,21 +80,21 @@ void AFPSGameMode::PostLogin(APlayerController* NewPlayer)
 		PlayerCount++;
 		if (CharClass)
 		{
-			if (AFPSCharacter* Player = GetWorld()->SpawnActor<AFPSCharacter>(CharClass, SpawnLoc, SpawnRot))
+			if (AFPSCharacter* Character = GetWorld()->SpawnActor<AFPSCharacter>(CharClass, SpawnLoc, SpawnRot))
 			{
-				PlayerList.Add(Player);
+				PlayerList.Add(Character);
 
-				Player->SpawnDefaultController();
+				Character->SpawnDefaultController();
 
 				//
 				if (AFPSPlayerController* Controller = Cast<AFPSPlayerController>(NewPlayer))
 				{
 					if (PlayerData* Data = UserMap.Find(Controller->UserName()))
 					{
-						Player->SetUserName(*(Controller->UserName()));
-						Data->Character = Player;
+						Character->SetUserName(*(Controller->UserName()));
+						Data->Character = Character;
 
-						if (AFPSAIController* AIC = Cast<AFPSAIController>(Player->GetController()))
+						if (AFPSAIController* AIC = Cast<AFPSAIController>(Character->GetController()))
 						{
 							AIC->SetUserName(Controller->UserName());
 						}

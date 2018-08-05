@@ -36,7 +36,7 @@ public:
 
 	void SetUserName(const FString& UserName);
 
-	FString UserName();
+	FString UserName() const;
 
 	//notify all Clients that this character switch weapon
 	UFUNCTION(NetMulticast, Reliable)
