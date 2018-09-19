@@ -3,6 +3,7 @@
 #include "FPSPlayerController.h"
 #include "Net/UnrealNetwork.h"
 #include "Camera/CameraComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "FPSLoginWidget.h"
 #include "FPSCharacter.h"
@@ -81,7 +82,7 @@ bool AFPSPlayerController::ServerGrenadeEquip_Validate()
 
 void AFPSPlayerController::ServerGrenadeEquip_Implementation()
 {
-	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode()))
+	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		if (AFPSCharacter* Char = GameMode->GetOwnCharacter(UserName_))
 		{
@@ -102,7 +103,7 @@ bool AFPSPlayerController::ServerGrenadeDraw_Validate()
 
 void AFPSPlayerController::ServerGrenadeDraw_Implementation()
 {
-	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode()))
+	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		if (AFPSCharacter* Char = GameMode->GetOwnCharacter(UserName_))
 		{
@@ -126,7 +127,7 @@ void AFPSPlayerController::OnGrenadeRelease()
 bool AFPSPlayerController::ServerGrenadeRelease_Validate(const FVector& ProjectileAtLocation)
 {
 	bool Ret = false;
-	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode()))
+	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		if (AFPSCharacter* Character = GameMode->GetOwnCharacter(UserName_))
 		{
@@ -140,7 +141,7 @@ bool AFPSPlayerController::ServerGrenadeRelease_Validate(const FVector& Projecti
 
 void AFPSPlayerController::ServerGrenadeRelease_Implementation(const FVector& ProjectileAtLocation)
 {
-	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode()))
+	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		if (AFPSCharacter* Character = GameMode->GetOwnCharacter(UserName_))
 		{
@@ -171,7 +172,7 @@ bool AFPSPlayerController::ServerMoveForward_Validate(const FVector& Direction, 
 
 void AFPSPlayerController::ServerMoveForward_Implementation(const FVector& Direction, float Val)
 {
-	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode()))
+	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		if (AFPSCharacter* Char = GameMode->GetOwnCharacter(UserName_))
 		{
@@ -203,7 +204,7 @@ bool AFPSPlayerController::ServerMoveRight_Validate(const FVector& Direction, fl
 
 void AFPSPlayerController::ServerMoveRight_Implementation(const FVector& Direction, float Val)
 {
-	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode()))
+	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		if (AFPSCharacter* Char = GameMode->GetOwnCharacter(UserName_))
 		{
@@ -243,7 +244,7 @@ bool AFPSPlayerController::ServerTurn_Validate(float Rate)
 
 void AFPSPlayerController::ServerTurn_Implementation(float Rate)
 {
-	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode()))
+	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		if (AFPSCharacter* Char = GameMode->GetOwnCharacter(UserName_))
 		{
