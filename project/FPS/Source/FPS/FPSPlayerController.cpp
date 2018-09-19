@@ -9,6 +9,8 @@
 #include "FPSAIController.h"
 #include "FPSGameMode.h"
 
+const float AFPSPlayerController::GRENADE_FROM_BODY_MAX_DIST = 120.f;
+
 AFPSPlayerController::AFPSPlayerController()
 {
 	//DefaultMouseCursor = EMouseCursor::Crosshairs;
@@ -115,23 +117,34 @@ void AFPSPlayerController::OnGrenadeRelease()
 	{
 		if (Character->GrenadeEquipFlag())
 		{
-			ServerGrenadeRelease();
+			FVector GripLocation = Character->GetGripSocketLocation();
+			ServerGrenadeRelease(GripLocation);
 		}
 	}
 }
 
-bool AFPSPlayerController::ServerGrenadeRelease_Validate()
+bool AFPSPlayerController::ServerGrenadeRelease_Validate(const FVector& ProjectileAtLocation)
 {
-	return true;
+	bool Ret = false;
+	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode()))
+	{
+		if (AFPSCharacter* Character = GameMode->GetOwnCharacter(UserName_))
+		{
+			float Dist = FVector::Dist(Character->GetActorLocation(), ProjectileAtLocation);
+			Ret = Dist < GRENADE_FROM_BODY_MAX_DIST;
+		}
+	}
+
+	return Ret;
 }
 
-void AFPSPlayerController::ServerGrenadeRelease_Implementation()
+void AFPSPlayerController::ServerGrenadeRelease_Implementation(const FVector& ProjectileAtLocation)
 {
 	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode()))
 	{
 		if (AFPSCharacter* Character = GameMode->GetOwnCharacter(UserName_))
 		{
-			Character->ServerReleaseGrenade();
+			Character->ServerReleaseGrenade(ProjectileAtLocation);
 		}
 	}
 }

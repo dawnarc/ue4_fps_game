@@ -119,12 +119,12 @@ void AFPSCharacter::DrawGrenade()
 	GrenadeDrawFlag = true;
 }
 
-bool AFPSCharacter::ServerReleaseGrenade_Validate()
+bool AFPSCharacter::ServerReleaseGrenade_Validate(const FVector& ProjectileAtLocation)
 {
 	return true;
 }
 
-void AFPSCharacter::ServerReleaseGrenade_Implementation()
+void AFPSCharacter::ServerReleaseGrenade_Implementation(const FVector& ProjectileAtLocation)
 {
 	//check grenade if is equipped
 	if (!GrenadeEquipFlag_)
@@ -148,13 +148,9 @@ void AFPSCharacter::ServerReleaseGrenade_Implementation()
 			FRotator SpawnRotation = GetActorRotation();//FirstPersonCameraComponent->GetComponentRotation();//GetActorRotation();//Mesh1P->GetComponentRotation();
 			SpawnRotation.Pitch = AimPitch_;
 
-			//const FVector SpawnLocation = GrenadeActor->GetActorLocation();
-			//FVector OffsetToWorld = SpawnRotation.RotateVector(SpawnLocationOffset);
-			const FVector SpawnLocation = GetMesh()->GetSocketLocation(*GrenadeGripSocketName) + SpawnRotation.Vector() * 10;
-
 			//DrawDebugSphere(World, SpawnLocation, 300.f, 100, FColor::Blue);
 
-			if (AFPSThrowActor* ThrowActor = World->SpawnActor<AFPSThrowActor>(GrenadeActorClass, SpawnLocation, SpawnRotation))
+			if (AFPSThrowActor* ThrowActor = World->SpawnActor<AFPSThrowActor>(GrenadeActorClass, ProjectileAtLocation, SpawnRotation))
 			{
 				//if not SetOwner(), Multicast UFUNCTION of this ThrowActor would not trigger on client.
 				ThrowActor->SetOwner(this);
@@ -210,6 +206,17 @@ float AFPSCharacter::GetAimPitch() const
 void AFPSCharacter::AddAimPitch(float PitchOffset)
 {
 	AimPitch_ += PitchOffset;
+}
+
+FVector AFPSCharacter::GetGripSocketLocation()
+{
+	FVector Location(999999999.f, -999999999.f, -999999999.f);
+	if (USkeletalMeshComponent* Mesh = GetMesh1P())
+	{
+		Location = Mesh->GetSocketLocation(*GrenadeGripSocketName);
+	}
+
+	return Location;
 }
 
 void AFPSCharacter::Tick(float DeltaSecond)

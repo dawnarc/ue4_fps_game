@@ -46,9 +46,9 @@ public:
 	void DrawGrenade();
 
 	UFUNCTION(Server, Reliable, WithValidation)
-		void ServerReleaseGrenade();
-	bool ServerReleaseGrenade_Validate();
-	void ServerReleaseGrenade_Implementation();
+		void ServerReleaseGrenade(const FVector& ProjectileAtLocation);
+	bool ServerReleaseGrenade_Validate(const FVector& ProjectileAtLocation);
+	void ServerReleaseGrenade_Implementation(const FVector& ProjectileAtLocation);
 
 	AFPSThrowActor* GetGrenadeActor() { return GrenadeActor; }
 
@@ -63,6 +63,8 @@ public:
 		float GetAimPitch() const;
 
 	void AddAimPitch(float PitchOffset);
+
+	FVector GetGripSocketLocation();
 
 protected:
 

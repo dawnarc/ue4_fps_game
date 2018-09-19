@@ -56,9 +56,9 @@ protected:
 	void OnGrenadeRelease();
 
 	UFUNCTION(Server, Reliable, WithValidation)
-		void ServerGrenadeRelease();
-	bool ServerGrenadeRelease_Validate();
-	void ServerGrenadeRelease_Implementation();
+		void ServerGrenadeRelease(const FVector& ProjectileAtLocation);
+	bool ServerGrenadeRelease_Validate(const FVector& ProjectileAtLocation);
+	void ServerGrenadeRelease_Implementation(const FVector& ProjectileAtLocation);
 
 	//*********** Grenade Handle end***********
 
@@ -109,4 +109,7 @@ private:
 
 	UPROPERTY(Replicated)
 		FString UserName_;
+
+	//max distance of grenade far from character's body
+	static const float GRENADE_FROM_BODY_MAX_DIST;
 };
