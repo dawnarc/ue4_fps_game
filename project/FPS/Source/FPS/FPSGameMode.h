@@ -25,6 +25,7 @@ class AFPSGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 public:
+
 	AFPSGameMode();
 
 	virtual FString InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId, const FString& Options, const FString& Portal = TEXT("")) override;
@@ -33,7 +34,7 @@ public:
 
 	virtual APlayerController* Login(UPlayer* NewPlayer, ENetRole InRemoteRole, const FString& Portal, const FString& Options, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;
 
-	virtual void PostLogin(APlayerController* NewPlayer);
+	virtual void PostLogin(APlayerController* NewPlayer) override;
 
 	AFPSCharacter* GetOwnCharacter(const FString& UserName);
 
