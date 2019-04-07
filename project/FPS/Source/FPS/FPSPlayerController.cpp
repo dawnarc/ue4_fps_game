@@ -119,7 +119,7 @@ void AFPSPlayerController::OnGrenadeRelease()
 		if (Character->GrenadeEquipFlag())
 		{
 			FVector GripLocation = Character->GetGripSocketLocation();
-			//To avoid the CollisionComponent of Character, becase when spawn grenades inside the CollisionComponent, 
+			//To avoid the CollisionComponent of Character, becase Physics would be conflicted when spawning grenades inside the CollisionComponent.
 			FVector ThrowLocation = GripLocation + GetControlRotation().Vector() * 50.f;
 			ServerGrenadeRelease(ThrowLocation);
 		}
