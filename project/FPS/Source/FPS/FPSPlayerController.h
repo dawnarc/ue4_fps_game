@@ -95,9 +95,9 @@ protected:
 	void LookUp(float Rate);
 
 	UFUNCTION(Server, Reliable, WithValidation)
-		void ServerLookUp(float Rate);
-	bool ServerLookUp_Validate(float Rate);
-	void ServerLookUp_Implementation(float Rate);
+		void ServerLookUp(float CurrPitch);
+	bool ServerLookUp_Validate(float CurrPitch);
+	void ServerLookUp_Implementation(float CurrPitch);
 
 	//*********** Player Input end***********
 

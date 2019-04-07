@@ -62,7 +62,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Aim")
 		float GetAimPitch() const;
 
-	void AddAimPitch(float PitchOffset);
+	void SetAimPitch(float CurrPitch);
 
 	FVector GetGripSocketLocation();
 

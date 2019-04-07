@@ -159,7 +159,8 @@ void AFPSPlayerController::MoveForward(float Val)
 			if (UCameraComponent* Camera = Char->GetFirstPersonCameraComponent())
 			{
 				// add movement in that direction
-				ServerMoveForward(Camera->GetForwardVector(), Val);
+				//ServerMoveForward(Camera->GetForwardVector(), Val);
+				Char->AddMovementInput(Camera->GetForwardVector(), Val);
 			}
 		}
 	}
@@ -191,7 +192,8 @@ void AFPSPlayerController::MoveRight(float Val)
 			if (UCameraComponent* Camera = Char->GetFirstPersonCameraComponent())
 			{
 				// add movement in that direction
-				ServerMoveRight(Camera->GetRightVector(), Val);
+				//ServerMoveRight(Camera->GetRightVector(), Val);
+				Char->AddMovementInput(Camera->GetRightVector(), Val);
 			}
 		}
 	}
@@ -219,21 +221,10 @@ void AFPSPlayerController::Turn(float Rate)
 	// calculate delta for this frame from the rate information
 	if (Rate != 0.f)
 	{
+		AddYawInput(Rate);
+
 		//turn the direction on Server
-		ServerTurn(Rate);
-
-		/*if (AFPSCharacter* Char = Cast<AFPSCharacter>(GetViewTarget()))
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, Char->GetActorRotation().ToString());
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, GetControlRotation().ToString());
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, Char->GetFirstPersonCameraComponent()->GetComponentRotation().ToString());
-		}*/
-
-		//turn the direction on Client
-		/*if (AActor* Target = GetViewTarget())
-		{
-			Target->AddActorLocalRotation(FRotator(0.f, Rate * InputYawScale, 0.f));
-		}*/
+		ServerTurn(Rate * InputYawScale);
 	}
 }
 
@@ -249,7 +240,8 @@ void AFPSPlayerController::ServerTurn_Implementation(float Rate)
 		if (AFPSCharacter* Char = GameMode->GetOwnCharacter(UserName_))
 		{
 			// add movement in that direction
-			Char->AddActorLocalRotation(FRotator(0.f, Rate, 0.f));
+			//Char->AddActorLocalRotation(FRotator(0.f, Rate, 0.f));
+			Char->AddActorWorldRotation(FRotator(0.f, Rate, 0.f));
 		}
 	}
 }
@@ -259,24 +251,25 @@ void AFPSPlayerController::LookUp(float Rate)
 	// calculate delta for this frame from the rate information
 	if (Rate != 0.f)
 	{
-		ServerLookUp(Rate);
+		AddPitchInput(-Rate);
 
-		if (AFPSCharacter* Char = Cast<AFPSCharacter>(GetViewTarget()))
+		float CurrPitch = GetControlRotation().Pitch;
+
+		if (CurrPitch > 180)
 		{
-			if (UCameraComponent* Camera = Char->GetFirstPersonCameraComponent())
-			{
-				Camera->AddLocalRotation(FRotator(Rate, 0.f, 0.f));
-			}
+			CurrPitch = CurrPitch - 360.f;
 		}
+
+		ServerLookUp(CurrPitch);
 	}
 }
 
-bool AFPSPlayerController::ServerLookUp_Validate(float Rate)
+bool AFPSPlayerController::ServerLookUp_Validate(float CurrPitch)
 {
-	return Rate != 0.f;
+	return true;
 }
 
-void AFPSPlayerController::ServerLookUp_Implementation(float Rate)
+void AFPSPlayerController::ServerLookUp_Implementation(float CurrPitch)
 {
 	if (AFPSGameMode* GameMode = Cast<AFPSGameMode>(GetWorld()->GetAuthGameMode()))
 	{
@@ -286,7 +279,7 @@ void AFPSPlayerController::ServerLookUp_Implementation(float Rate)
 			//Char->AddActorLocalRotation(FRotator(Rate * InputYawScale, 0.f, 0.f));
 
 			//Char->MulticastLookup(Rate);
-			Char->AddAimPitch(Rate);
+			Char->SetAimPitch(CurrPitch);
 		}
 	}
 }

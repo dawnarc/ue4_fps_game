@@ -86,9 +86,10 @@ void AFPSGameMode::PostLogin(APlayerController* NewPlayer)
 
 				Character->SpawnDefaultController();
 
-				//
 				if (AFPSPlayerController* Controller = Cast<AFPSPlayerController>(NewPlayer))
 				{
+					Controller->Possess(Character);
+
 					if (PlayerData* Data = UserMap.Find(Controller->UserName()))
 					{
 						Character->SetUserName(*(Controller->UserName()));

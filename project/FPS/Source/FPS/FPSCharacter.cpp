@@ -203,9 +203,9 @@ float AFPSCharacter::GetAimPitch() const
 	return AimPitch_;
 }
 
-void AFPSCharacter::AddAimPitch(float PitchOffset)
+void AFPSCharacter::SetAimPitch(float CurrPitch)
 {
-	AimPitch_ += PitchOffset;
+	AimPitch_ = CurrPitch;
 }
 
 FVector AFPSCharacter::GetGripSocketLocation()
@@ -233,7 +233,7 @@ void AFPSCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (ROLE_SimulatedProxy == Role && NM_Client == GetNetMode())
+	if ((ROLE_SimulatedProxy == Role || ROLE_AutonomousProxy == Role) && NM_Client == GetNetMode())
 	{
 		if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
 		{
