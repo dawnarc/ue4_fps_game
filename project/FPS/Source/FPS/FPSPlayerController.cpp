@@ -10,7 +10,7 @@
 #include "FPSAIController.h"
 #include "FPSGameMode.h"
 
-const float AFPSPlayerController::GRENADE_FROM_BODY_MAX_DIST = 120.f;
+const float AFPSPlayerController::GRENADE_FROM_BODY_MAX_DIST = 200.f;
 
 AFPSPlayerController::AFPSPlayerController()
 {
@@ -119,7 +119,9 @@ void AFPSPlayerController::OnGrenadeRelease()
 		if (Character->GrenadeEquipFlag())
 		{
 			FVector GripLocation = Character->GetGripSocketLocation();
-			ServerGrenadeRelease(GripLocation);
+			//To avoid the CollisionComponent of Character, becase when spawn grenades inside the CollisionComponent, 
+			FVector ThrowLocation = GripLocation + GetControlRotation().Vector() * 50.f;
+			ServerGrenadeRelease(ThrowLocation);
 		}
 	}
 }
