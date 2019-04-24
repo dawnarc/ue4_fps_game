@@ -162,7 +162,9 @@ void AFPSPlayerController::MoveForward(float Val)
 			{
 				// add movement in that direction
 				//ServerMoveForward(Camera->GetForwardVector(), Val);
-				Char->AddMovementInput(Camera->GetForwardVector(), Val);
+				FMatrix RotMatrix = FRotationMatrix(Camera->GetComponentRotation());
+				FVector ForwardVector = RotMatrix.GetScaledAxis(EAxis::X).GetSafeNormal2D();
+				Char->AddMovementInput(ForwardVector, Val);
 			}
 		}
 	}
@@ -195,7 +197,9 @@ void AFPSPlayerController::MoveRight(float Val)
 			{
 				// add movement in that direction
 				//ServerMoveRight(Camera->GetRightVector(), Val);
-				Char->AddMovementInput(Camera->GetRightVector(), Val);
+				FMatrix RotMatrix = FRotationMatrix(Camera->GetComponentRotation());
+				FVector RightVector = RotMatrix.GetScaledAxis(EAxis::Y).GetSafeNormal2D();
+				Char->AddMovementInput(RightVector, Val);
 			}
 		}
 	}
