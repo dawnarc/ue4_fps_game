@@ -1,0 +1,1 @@
+"D:\Program Files\Epic Games\UE_4.27\Engine\Binaries\Win64\UE4Editor.exe" "C:\workspace\ue4_fps_game\project\FPS\FPS.uproject" /Game/FirstPersonCPP/Maps/FirstPersonExampleMap -server -port=7777 -log
