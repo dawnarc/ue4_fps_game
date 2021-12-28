@@ -5,4 +5,4 @@
 
 ![screenshoots01](./project/FPS/screenshots/screenshots-01.gif)
 
-![screenshoots01](./project/FPS/screenshots/screenshots-02.gif)
+![screenshoots02](./project/FPS/screenshots/screenshots-02.gif)
